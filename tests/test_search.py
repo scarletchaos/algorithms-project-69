@@ -1,6 +1,7 @@
 import pytest
 from search_engine.search_engine import search
 from search_engine.search_engine import reverse_index
+from search_engine.search_engine import tf_idf
 
 
 @pytest.fixture
@@ -50,4 +51,6 @@ def test_reverse_index():
                                    'more': ['doc2', 'doc3'],
                                    'data': ['doc1', 'doc2'],
                                    'even': ['doc3']}
+def test_tfidf(data):
+    assert tf_idf(data, data[0], 'shoot') < tf_idf(data, data[1], 'shoot')
 

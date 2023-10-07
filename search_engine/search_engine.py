@@ -1,3 +1,4 @@
+from math import log10
 from typing import Optional
 import re
 import functools
@@ -40,12 +41,26 @@ def search(docs: list[Optional[dict[str, str]]], query: str) -> list[Optional[st
 def reverse_index(docs: list[Optional[dict[str, str]]]) -> dict[str, list[str]]:
     result = {}
     for doc in docs:
-        words = re.findall(r"\w+", doc['text'].lower())
+        words = re.findall(r"\w+", doc["text"].lower())
         for word in words:
             if word not in result.keys():
-                result[word] = [doc['id']]
+                result[word] = [doc["id"]]
             else:
-                result[word].append(doc['id'])
+                result[word].append(doc["id"])
 
     return result
 
+
+def tf_idf(
+    docs: list[Optional[dict[str, str]]],
+    doc: dict[str, str],
+    query: str
+) -> float:
+    rev = reverse_index(docs)
+    term = "".join(re.findall(r"\w+", query))
+    tf = len(re.findall(f"(?<!\\w){term}(?!\\w)", doc["text"].lower())) / len(
+        doc["text"].split(" ")
+    )
+
+    idf = log10(len(docs)/(len(rev[term])))
+    return tf*idf
