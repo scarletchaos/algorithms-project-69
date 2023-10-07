@@ -7,6 +7,9 @@ def search(docs: list[Optional[dict[str, str]]], query: str) -> list[Optional[st
     term = ''.join(re.findall(r'\w+', query)).lower()
     result = []
     for doc in docs:
-        if re.findall(f'(?<!\\w){term}(?!\\w)', doc['text'].lower()):
-            result.append(doc["id"])
-    return result
+        appearances = len(re.findall(f'(?<!\\w){term}(?!\\w)', doc['text'].lower()))
+        if appearances:
+            result.append([doc["id"], appearances])
+
+    result.sort(key=lambda doc: doc[1], reverse=True)
+    return [doc[0] for doc in result]   
