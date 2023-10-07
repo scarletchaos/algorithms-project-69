@@ -22,3 +22,7 @@ def test_search(data ):
 
 def test_search_empty(): 
     assert search([], 'shoot') == []
+
+def test_search_extra_symbols(data):
+    assert search(data, 'pint') == ['doc1']
+    assert search(data, 'pint!') == ['doc1']
