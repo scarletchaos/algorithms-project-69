@@ -1,5 +1,6 @@
 import pytest
 from search_engine.search_engine import search
+from search_engine.search_engine import reverse_index
 
 
 @pytest.fixture
@@ -34,3 +35,19 @@ def test_search_relevancy(data):
 
 def test_fuzzy_search(data):
     assert search(data, 'shoot at me') == ['doc2', 'doc1']
+
+def test_reverse_index():
+    doc1 = "Some data"
+    doc2 = "Some more data"
+    doc3 = "Even more"
+    docs = [
+        {"id": "doc1", "text": doc1},
+        {"id": "doc2", "text": doc2},
+        {"id": "doc3", "text": doc3},
+    ]
+
+    assert reverse_index(docs) == {'some': ['doc1', 'doc2'],
+                                   'more': ['doc2', 'doc3'],
+                                   'data': ['doc1', 'doc2'],
+                                   'even': ['doc3']}
+
