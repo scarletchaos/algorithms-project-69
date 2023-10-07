@@ -1,15 +1,35 @@
 from typing import Optional
 import re
+import functools
 
-
+def compare_texts(t1, t2):
+    if t1[1] == t2[1]:
+        if t1[2] > t2[2]:
+            return 1
+        elif t1[2] < t2[2]:
+            return -1
+        else:
+            return 0
+    elif t1[1] > t2[1]:
+        return 1
+    else:
+        return -1
+    
 def search(docs: list[Optional[dict[str, str]]], query: str) -> list[Optional[str]]:
 
-    term = ''.join(re.findall(r'\w+', query)).lower()
+    terms = re.findall(r'\w+', query)
     result = []
     for doc in docs:
-        appearances = len(re.findall(f'(?<!\\w){term}(?!\\w)', doc['text'].lower()))
-        if appearances:
-            result.append([doc["id"], appearances])
+        appears_total = 0
+        wordcount = 0
+        for term in terms:
+            appears = len(re.findall(f'(?<!\\w){term}(?!\\w)', doc['text'].lower()))
+            if appears:
+                wordcount += 1
+                appears_total += appears
+        if wordcount or appears_total:
+            result.append([doc["id"], wordcount, appears_total])
 
-    result.sort(key=lambda doc: doc[1], reverse=True)
+    result.sort(key=functools.cmp_to_key(compare_texts), reverse=True)
+    print(result)
     return [doc[0] for doc in result]   
