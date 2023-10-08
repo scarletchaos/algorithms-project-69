@@ -1,7 +1,8 @@
-from math import log10
+from math import log, log10, log2
 from typing import Optional
 import re
 import functools
+import pdb
 
 
 def compare_texts(t1, t2):
@@ -25,15 +26,17 @@ def search(docs: list[Optional[dict[str, str]]], query: str) -> list[Optional[st
     for doc in docs:
         appears_total = 0
         wordcount = 0
+        tfidf = 0
         for term in terms:
             appears = len(re.findall(f"(?<!\\w){term}(?!\\w)", doc["text"].lower()))
+            tfidf += tf_idf(docs, doc, term) 
             if appears:
                 wordcount += 1
                 appears_total += appears
         if wordcount or appears_total:
-            result.append([doc["id"], wordcount, appears_total])
+            result.append([doc["id"], wordcount, appears_total, tfidf])
 
-    result.sort(key=functools.cmp_to_key(compare_texts), reverse=True)
+    result.sort(key=lambda x: x[3], reverse=True)
     print(result)
     return [doc[0] for doc in result]
 
@@ -46,21 +49,20 @@ def reverse_index(docs: list[Optional[dict[str, str]]]) -> dict[str, list[str]]:
             if word not in result.keys():
                 result[word] = [doc["id"]]
             else:
-                result[word].append(doc["id"])
+                if doc["id"] not in result[word]:
+                    result[word].append(doc["id"])
 
     return result
 
 
 def tf_idf(
-    docs: list[Optional[dict[str, str]]],
-    doc: dict[str, str],
-    query: str
+    docs: list[Optional[dict[str, str]]], doc: dict[str, str], query: str
 ) -> float:
     rev = reverse_index(docs)
     term = "".join(re.findall(r"\w+", query))
-    tf = len(re.findall(f"(?<!\\w){term}(?!\\w)", doc["text"].lower())) / len(
-        doc["text"].split(" ")
-    )
 
-    idf = log10(len(docs)/(len(rev[term])))
-    return tf*idf
+    term_count = len(re.findall(f"(?<!\\w){term}(?!\\w)", doc["text"].lower()))
+    tf = term_count / len(doc["text"].split(" "))
+
+    idf = log2((1 + (len(docs) - len(rev[term]) + 1) / (len(rev[term]) + 0.5)))
+    return tf * idf

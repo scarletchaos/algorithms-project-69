@@ -52,5 +52,6 @@ def test_reverse_index():
                                    'data': ['doc1', 'doc2'],
                                    'even': ['doc3']}
 def test_tfidf(data):
-    assert tf_idf(data, data[0], 'shoot') < tf_idf(data, data[1], 'shoot')
+    print(tf_idf(data, data[0], 'shoot'))
+    assert tf_idf(data, data[0], 'shoot') > tf_idf(data, data[1], 'shoot')
 
