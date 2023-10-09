@@ -29,7 +29,7 @@ def search(docs: list[Optional[dict[str, str]]], query: str) -> list[Optional[st
         tfidf = 0
         for term in terms:
             appears = len(re.findall(f"(?<!\\w){term}(?!\\w)", doc["text"].lower()))
-            tfidf += tf_idf(docs, doc, term) 
+            tfidf += tf_idf(docs, doc, term)
             if appears:
                 wordcount += 1
                 appears_total += appears
@@ -64,5 +64,11 @@ def tf_idf(
     term_count = len(re.findall(f"(?<!\\w){term}(?!\\w)", doc["text"].lower()))
     tf = term_count / len(doc["text"].split(" "))
 
-    idf = log2((1 + (len(docs) - len(rev[term]) if term in rev.keys() else 0 + 1) / (len(rev[term]) if term in rev.keys() else 0 + 0.5)))
+    idf = log2(
+        (
+            1
+            + (len(docs) - (len(rev[term]) if term in rev.keys() else 0) + 1)
+            / ((len(rev[term]) if term in rev.keys() else 0) + 0.5)
+        )
+    )
     return tf * idf
