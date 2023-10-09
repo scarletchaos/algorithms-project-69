@@ -64,5 +64,5 @@ def tf_idf(
     term_count = len(re.findall(f"(?<!\\w){term}(?!\\w)", doc["text"].lower()))
     tf = term_count / len(doc["text"].split(" "))
 
-    idf = log2((1 + (len(docs) - len(rev[term]) + 1) / (len(rev[term]) + 0.5)))
+    idf = log2((1 + (len(docs) - len(rev[term]) if term in rev.keys() else 0 + 1) / (len(rev[term]) if term in rev.keys() else 0 + 0.5)))
     return tf * idf
