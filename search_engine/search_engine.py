@@ -62,15 +62,9 @@ def tf_idf(
 ) -> float:
     rev = reverse_index(docs)
     term = "".join(re.findall(r"\w+", query))
-
     term_count = len(re.findall(f"(?<!\\w){term}(?!\\w)", doc["text"].lower()))
     tf = term_count / len(doc["text"].split(" "))
-
-    idf = log2(
-        (1 + (len(docs) - (len(rev[term]) if term in rev.keys() 
-                                          else 0) + 1) / ((len(rev[term]) if
-                                                           term in rev.keys()
-                                                           else 0) + 0.5)
-        )
-    )
+    noterm = len(docs) - (len(rev[term]) if term in rev.keys() else 0) + 1
+    yesterm = (len(rev[term]) if term in rev.keys() else 0) + 0.5
+    idf = log2((1 + noterm / (yesterm + 0.5)))
     return tf * idf
