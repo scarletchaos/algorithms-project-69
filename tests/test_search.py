@@ -20,7 +20,7 @@ def data():
 
 
 def test_search(data):
-    assert search(data, "shoot") in [["doc1", "doc2"],  ["doc2", "doc1"]]
+    assert search(data, "shoot") in [["doc1", "doc2"], ["doc2", "doc1"]]
 
 
 def test_search_empty():
@@ -31,11 +31,14 @@ def test_search_extra_symbols(data):
     assert search(data, "pint") == ["doc1"]
     assert search(data, "pint!") == ["doc1"]
 
+
 def test_search_relevancy(data):
-    assert search(data, 'shoot') == ['doc1', 'doc2']
+    assert search(data, "shoot") == ["doc1", "doc2"]
+
 
 def test_fuzzy_search(data):
-    assert search(data, 'shoot at me') == ['doc2', 'doc1']
+    assert search(data, "shoot at me") == ["doc2", "doc1"]
+
 
 def test_reverse_index():
     doc1 = "Some data"
@@ -47,11 +50,14 @@ def test_reverse_index():
         {"id": "doc3", "text": doc3},
     ]
 
-    assert reverse_index(docs) == {'some': ['doc1', 'doc2'],
-                                   'more': ['doc2', 'doc3'],
-                                   'data': ['doc1', 'doc2'],
-                                   'even': ['doc3']}
-def test_tfidf(data):
-    print(tf_idf(data, data[0], 'shoot'))
-    assert tf_idf(data, data[0], 'shoot') > tf_idf(data, data[1], 'shoot')
+    assert reverse_index(docs) == {
+        "some": ["doc1", "doc2"],
+        "more": ["doc2", "doc3"],
+        "data": ["doc1", "doc2"],
+        "even": ["doc3"],
+    }
 
+
+def test_tfidf(data):
+    print(tf_idf(data, data[0], "shoot"))
+    assert tf_idf(data, data[0], "shoot") > tf_idf(data, data[1], "shoot")
