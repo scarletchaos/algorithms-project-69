@@ -1,8 +1,6 @@
-from math import log, log10, log2
+from math import log2
 from typing import Optional
 import re
-import functools
-import pdb
 
 
 def compare_texts(t1, t2):
@@ -19,7 +17,8 @@ def compare_texts(t1, t2):
         return -1
 
 
-def search(docs: list[Optional[dict[str, str]]], query: str) -> list[Optional[str]]:
+def search(docs: list[Optional[dict[str, str]]],
+           query: str) -> list[Optional[str]]:
     terms = re.findall(r"\w+", query)
     print(terms)
     result = []
@@ -28,7 +27,8 @@ def search(docs: list[Optional[dict[str, str]]], query: str) -> list[Optional[st
         wordcount = 0
         tfidf = 0
         for term in terms:
-            appears = len(re.findall(f"(?<!\\w){term}(?!\\w)", doc["text"].lower()))
+            appears = len(re.findall(f"(?<!\\w){term}(?!\\w)",
+                                     doc["text"].lower()))
             tfidf += tf_idf(docs, doc, term)
             if appears:
                 wordcount += 1
