@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "search-engine"
+version = "0.1.0"
+description = ""
+authors = ["Georgy Bachakashvili <bachakashvili.ga+github@gmail.com>"]
+readme = "README.md"
+packages = [{include = "search_engine"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+regexp = "^0.1"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
