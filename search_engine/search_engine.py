@@ -66,9 +66,9 @@ def tf_idf(
 
     idf = log2(
         (
-            1
-            + (len(docs) - (len(rev[term]) if term in rev.keys() else 0) + 1)
-            / ((len(rev[term]) if term in rev.keys() else 0) + 0.5)
+            1 + (len(docs) - 
+            (len(rev[term]) if term in rev.keys() else 0) + 1) / 
+            ((len(rev[term]) if term in rev.keys() else 0) + 0.5)
         )
     )
     return tf * idf
