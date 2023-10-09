@@ -6,7 +6,8 @@ from search_engine.search_engine import tf_idf
 
 @pytest.fixture
 def data():
-    doc1 = "I can't shoot shoot shoot shoot shoot shoot shoot shoot straight unless I've had a pint!"
+    doc1 = "I can't shoot shoot shoot shoot shoot shoot shoot shoot straight \
+            unless I've had a pint!"
     doc2 = "Don't shoot shoot shoot that thing at me."
     doc3 = "I'm your shooter."
 
